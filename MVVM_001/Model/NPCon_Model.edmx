@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище NPConModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="album">
+          <Key>
+            <PropertyRef Name="id_album" />
+          </Key>
+          <Property Name="id_album" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_alb" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="description_alb" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="in_design" Type="bit" />
+          <Property Name="compr_name" Type="nvarchar" MaxLength="50" />
+          <Property Name="created_alb_orig_login" Type="nvarchar" MaxLength="50" />
+          <Property Name="file_path" Type="nvarchar(max)" />
+          <Property Name="is_end_prod_alb" Type="bit" />
+          <Property Name="id_fact" Type="int" />
+        </EntityType>
+        <EntityType Name="factory">
+          <Key>
+            <PropertyRef Name="id_fact" />
+          </Key>
+          <Property Name="id_fact" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="f_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="f_prefix" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_album_factory">
+          <End Role="factory" Type="Self.factory" Multiplicity="0..1" />
+          <End Role="album" Type="Self.album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="factory">
+              <PropertyRef Name="id_fact" />
+            </Principal>
+            <Dependent Role="album">
+              <PropertyRef Name="id_fact" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище NPConModelContainer">
+          <EntitySet Name="album" EntityType="Self.album" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="factory" EntityType="Self.factory" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_album_factory" Association="Self.FK_album_factory">
+            <End Role="factory" EntitySet="factory" />
+            <End Role="album" EntitySet="album" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NPConModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="album">
+          <Key>
+            <PropertyRef Name="id_album" />
+          </Key>
+          <Property Name="id_album" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_alb" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description_alb" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="in_design" Type="Boolean" />
+          <Property Name="compr_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="created_alb_orig_login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="file_path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="is_end_prod_alb" Type="Boolean" />
+          <Property Name="id_fact" Type="Int32" />
+          <NavigationProperty Name="factory" Relationship="Self.FK_album_factory" FromRole="album" ToRole="factory" />
+        </EntityType>
+        <EntityType Name="factory">
+          <Key>
+            <PropertyRef Name="id_fact" />
+          </Key>
+          <Property Name="id_fact" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="f_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="f_prefix" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="albums" Relationship="Self.FK_album_factory" FromRole="factory" ToRole="album" />
+        </EntityType>
+        <Association Name="FK_album_factory">
+          <End Role="factory" Type="Self.factory" Multiplicity="0..1" />
+          <End Role="album" Type="Self.album" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="factory">
+              <PropertyRef Name="id_fact" />
+            </Principal>
+            <Dependent Role="album">
+              <PropertyRef Name="id_fact" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NPConEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="albums" EntityType="Self.album" />
+          <EntitySet Name="factories" EntityType="Self.factory" />
+          <AssociationSet Name="FK_album_factory" Association="Self.FK_album_factory">
+            <End Role="factory" EntitySet="factories" />
+            <End Role="album" EntitySet="albums" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище NPConModelContainer" CdmEntityContainer="NPConEntities">
+          <EntitySetMapping Name="albums">
+            <EntityTypeMapping TypeName="NPConModel.album">
+              <MappingFragment StoreEntitySet="album">
+                <ScalarProperty Name="id_album" ColumnName="id_album" />
+                <ScalarProperty Name="name_alb" ColumnName="name_alb" />
+                <ScalarProperty Name="description_alb" ColumnName="description_alb" />
+                <ScalarProperty Name="in_design" ColumnName="in_design" />
+                <ScalarProperty Name="compr_name" ColumnName="compr_name" />
+                <ScalarProperty Name="created_alb_orig_login" ColumnName="created_alb_orig_login" />
+                <ScalarProperty Name="file_path" ColumnName="file_path" />
+                <ScalarProperty Name="is_end_prod_alb" ColumnName="is_end_prod_alb" />
+                <ScalarProperty Name="id_fact" ColumnName="id_fact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="factories">
+            <EntityTypeMapping TypeName="NPConModel.factory">
+              <MappingFragment StoreEntitySet="factory">
+                <ScalarProperty Name="id_fact" ColumnName="id_fact" />
+                <ScalarProperty Name="f_name" ColumnName="f_name" />
+                <ScalarProperty Name="f_prefix" ColumnName="f_prefix" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
